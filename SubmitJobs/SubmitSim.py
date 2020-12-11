@@ -17,7 +17,7 @@ def main() :
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--outputFile",   help="Output File.")
     parser.add_argument("-n", "--nFiles",   help="Number of Files to produce.")
-    parser.add_argument("-c", "--script",   help="Input script.")
+    parser.add_argument("-s", "--script",   help="Input script.")
     parser.add_argument("-W", "--time",   help="Time of job for batch.")
     parser.add_argument("-l", "--log",   help="Log file")
 
@@ -31,8 +31,10 @@ def main() :
     bsub = ""
     if(args.time is not None):
         bsub = "bsub -W " + args.time
+        
+    n = int(args.nFiles())
 
-    for i in range(args.nFiles): 
+    for i in range(n): 
         outfile = "{0}_{1}.root".format(args.outputFile, i)
         print ("Processing file: {0}".format(outfile))
         command = "{0} -o {1} fire {2} {3} {4}".format(bsub, args.log, args.script, i, outfile)
