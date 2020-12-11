@@ -36,8 +36,9 @@ def main() :
 
     for i in range(n): 
         outfile = "{0}_{1}.root".format(args.outputFile, i)
+        logfile = "{0}_{1}.log".format(args.log, i)
         print ("Processing file: {0}".format(outfile))
-        command = "{0} -o {1} fire {2} {3} {4}".format(bsub, args.log, args.script, i, outfile)
+        command = "{0} -o {1} fire {2} {3} {4}".format(bsub, logfile, args.script, i, outfile)
         subprocess.Popen(command, shell=True).wait() 
         time.sleep(0.1)
 
