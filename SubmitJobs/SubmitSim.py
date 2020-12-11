@@ -32,7 +32,7 @@ def main() :
     if(args.time is not None):
         bsub = "bsub -W " + args.time
         
-    n = int(args.nFiles())
+    n = int(args.nFiles)
 
     for i in range(n): 
         outfile = "{0}_{1}.root".format(args.outputFile, i)
