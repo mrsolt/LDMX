@@ -42,7 +42,7 @@ outfileroot = TFile(remainder[0]+".root","RECREATE")
 
 infile = TFile(remainder[1])
 
-histo = infile.Get("myana/myana_failVeto")
+histo = infile.Get("myana/myana_lambda_min")
 nevents = histo.GetEntries()
 
 h = TH1F("h", "h", histo.GetNbinsX(), histo.GetXaxis().GetBinLowEdge(1), histo.GetXaxis().GetBinUpEdge(histo.GetNbinsX()))
@@ -52,11 +52,26 @@ for i in range(h.GetNbinsX()):
     ineff = 1 - n / float(nevents)
     h.SetBinContent(i, ineff)
     
+histo2 = infile.Get("myana/myana_lambda_max")
+nevents2 = histo2.GetEntries()
+
+h2 = TH1F("h2", "h2", histo2.GetNbinsX(), histo2.GetXaxis().GetBinLowEdge(1), histo2.GetXaxis().GetBinUpEdge(histo2.GetNbinsX()))
+for i in range(h2.GetNbinsX()):
+    n = histo2.Integral(1,i)
+    ineff = 1 - n / float(nevents2)
+    h2.SetBinContent(i, ineff)
+    
 openPDF(outfile,c)
 h.Draw()
 h.SetTitle("Inefficiency")
 h.GetXaxis().SetTitle("#lambda")
 h.GetYaxis().SetTitle("Inefficiency")
 c.SetLogy(1)
+c.Print(outfile+".pdf")
+
+h2.Draw()
+h2.SetTitle("Inefficiency")
+h2.GetXaxis().SetTitle("#lambda")
+h2.GetYaxis().SetTitle("Inefficiency")
 c.Print(outfile+".pdf")
 closePDF(outfile,c)
