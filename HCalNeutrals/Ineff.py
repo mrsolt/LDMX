@@ -44,13 +44,13 @@ infile = TFile(remainder[1])
 infile2 = TFile(remainder[2])
 infile3 = TFile(remainder[3])
 
-histo = infile.Get("myana/myana_lambda_min")
+histo = infile.Get("myana/myana_lambda_max")
 nevents = histo.GetEntries()
 
-histo2 = infile2.Get("myana/myana_lambda_min")
+histo2 = infile2.Get("myana/myana_lambda_max")
 nevents2 = histo2.GetEntries()
 
-histo3 = infile3.Get("myana/myana_lambda_min")
+histo3 = infile3.Get("myana/myana_lambda_max")
 nevents3 = histo3.GetEntries()
 
 h = TH1F("h", "h", histo.GetNbinsX(), histo.GetXaxis().GetBinLowEdge(1), histo.GetXaxis().GetBinUpEdge(histo.GetNbinsX()))
