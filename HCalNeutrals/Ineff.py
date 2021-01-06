@@ -44,7 +44,7 @@ infile = TFile(remainder[1])
 infile2 = TFile(remainder[2])
 infile3 = TFile(remainder[3])
 
-histo = infile.Get("myana/myana_lambda_max")
+histo = infile.Get("myana/myana_lambda_min")
 nevents = histo.GetEntries()
 
 histo2 = infile2.Get("myana/myana_lambda_min")
