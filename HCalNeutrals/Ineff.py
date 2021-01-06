@@ -17,16 +17,21 @@ sys.argv = tmpargv
 #List arguments
 def print_usage():
     print ("\nUsage: {0} <output file base name> <input file>".format(sys.argv[0]))
+    print ('\t-l: plot label')
     print ('\t-h: this help message')
     print
 
-options, remainder = getopt.gnu_getopt(sys.argv[1:], 'h')
+label = ""
+
+options, remainder = getopt.gnu_getopt(sys.argv[1:], 'hl:')
 
 # Parse the command line arguments
 for opt, arg in options:
-		if opt=='-h':
-			print_usage()
-			sys.exit(0)
+    if opt=='-l':
+        label = str(arg)
+    if opt=='-h':
+        print_usage()
+        sys.exit(0)
             
 def openPDF(outfile,canvas):
 	canvas.Print(outfile+".pdf[")
@@ -105,7 +110,7 @@ h.SetLineColor(1)
 h2.SetLineColor(2)
 h3.SetLineColor(4)
 h.Draw()
-h.SetTitle("Inefficiency at Min Z")
+h.SetTitle("Inefficiency at Min Z {0}".format(label))
 h.GetXaxis().SetTitle("#lambda")
 h.GetYaxis().SetTitle("Inefficiency")
 h2.Draw("same")
@@ -127,7 +132,7 @@ h4.SetLineColor(1)
 h5.SetLineColor(2)
 h6.SetLineColor(4)
 h4.Draw()
-h4.SetTitle("Inefficiency at Max Z")
+h4.SetTitle("Inefficiency at Max Z {0}".format(label))
 h4.GetXaxis().SetTitle("#lambda")
 h4.GetYaxis().SetTitle("Inefficiency")
 h5.Draw("same")
