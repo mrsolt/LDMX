@@ -10,6 +10,7 @@ import sys
 tmpargv = sys.argv
 sys.argv = []
 import getopt
+import numpy as np
 import ROOT
 from ROOT import gROOT, TFile, TTree, TChain, gDirectory, TLine, gStyle, TCanvas, TLegend, TH1F, TLatex
 sys.argv = tmpargv
@@ -50,25 +51,59 @@ infile = TFile(remainder[1])
 histo = infile.Get("myana/myana_trigNLay")
 nevents = histo.GetEntries()
 
-h = TH1F("h", "h", histo.GetNbinsX(), histo.GetXaxis().GetBinLowEdge(1), histo.GetXaxis().GetBinUpEdge(histo.GetNbinsX()))
+#h = TH1F("h", "h", histo.GetNbinsX(), histo.GetXaxis().GetBinLowEdge(1), histo.GetXaxis().GetBinUpEdge(histo.GetNbinsX()))
+h = TH1F("h", "h", 20, 0, 20)
 
 pulse = 37 #MHz
 mu = 1. #average electons / bunch
 
 
 for i in range(2, h.GetNbinsX()):
-    n = histo.Integral(2,i)
-    rate = n * / pulse * mu * 1000 #kHz
+    n = histo.Integral(i,histo.GetNbinsX())
+    rate = n * pulse * mu / 1000 #kHz
     h.SetBinContent(i, rate)
-    error = sqrt(1/n) * rate
-    h.SetError(i, error)
+    error = 0
+    if(n != 0):
+        error = np.sqrt(1/n) * rate
+    else:
+        error = np.sqrt(1/2.) * pulse * mu / 1000.
+    h.SetBinError(i, error)
+
+histo2 = infile.Get("myana/myana_nHitsMax")
+histo2.Sumw2()
+histo2.Scale(1/nevents)
+h3 = TH1F("h3", "h3", 20, 0, 20)
+for i in range(h3.GetNbinsX()):
+    h3.SetBinContent(i, histo2.GetBinContent(i))
+    h3.SetBinError(i, histo2.GetBinError(i))
 
 openPDF(outfile,c)
 h.Draw()
 h.SetTitle("Trigger Rate Inclusive e- Sample {0}".format(label))
 h.GetXaxis().SetTitle("Min Blocks Required")
 h.GetYaxis().SetTitle("Trigger Rate kHz")
-#c.SetLogy(1)
+c.SetLogy(1)
+c.Print(outfile+".pdf")
+
+histo.Sumw2()
+histo.Scale(pulse/1000.*mu)
+h2 = TH1F("h2", "h2", 20, 0, 20)
+for i in range(h2.GetNbinsX()):
+    h2.SetBinContent(i, histo.GetBinContent(i))
+    h2.SetBinError(i, histo.GetBinError(i))
+
+h2.Draw()
+h2.SetTitle("Maximum Consec. Blocks within PE Range: Inclusive e- Sample  {0}".format(label))
+h2.GetXaxis().SetTitle("Max Consec. Blocks")
+h2.GetYaxis().SetTitle("Rate (kHz)")
+c.SetLogy(1)
+c.Print(outfile+".pdf")
+
+h3.Draw()
+h3.SetTitle("Maximum Hits on MIP Track Inclusive e- Sample  {0}".format(label))
+h3.GetXaxis().SetTitle("Maximum Hits on Track")
+h3.GetYaxis().SetTitle("Events / Beam e-")
+c.SetLogy(1)
 c.Print(outfile+".pdf")
 
 closePDF(outfile,c)
