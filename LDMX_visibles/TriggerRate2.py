@@ -56,10 +56,12 @@ print(time)
 
 openPDF(outfile,c)
 
-color = 1
+color = 0
 for i in range(len(histos)):
     histos[i].Sumw2()
     histos[i].Scale(1 / time / 1000.)
+    color = color + 1
+    if(color == 5): color = color + 1
     if (i == 0):
         histos[i].SetTitle("Trigger Rate for Esum > E and zmin > z")
         histos[i].GetXaxis().SetTitle("z [mm]")
@@ -74,8 +76,6 @@ for i in range(len(histos)):
         legend.SetTextFont(42)
         legend.SetTextSize(0.035)
         legend.AddEntry(histos[i],labels[i],"LP")
-        color = color + 1
-        if(color == 5): color = color + 1
     histos[i].SetLineColor(color)
     histos[i].Draw("same")
     legend.AddEntry(histos[i],labels[i],"LP")
