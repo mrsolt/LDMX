@@ -46,7 +46,6 @@ histos.append(infile.Get("myana/myana_ecaltrig_15GeV"))
 histos.append(infile.Get("myana/myana_ecaltrig_20GeV"))
 histos.append(infile.Get("myana/myana_ecaltrig_25GeV"))
 histos.append(infile.Get("myana/myana_ecaltrig_30GeV"))
-nevents = histo.GetEntries()
 
 energies = [100., 1500., 2000., 2500., 3000.]
 labels = ["> 0.1 GeV", "> 1.5 GeV", "> 2.0 GeV", "> 2.5 GeV", "> 3.0 GeV"]
