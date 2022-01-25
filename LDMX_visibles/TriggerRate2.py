@@ -76,6 +76,7 @@ for i in range(len(histos)):
         legend.SetTextFont(42)
         legend.SetTextSize(0.035)
         legend.AddEntry(histos[i],labels[i],"LP")
+        continue
     histos[i].SetLineColor(color)
     histos[i].Draw("same")
     legend.AddEntry(histos[i],labels[i],"LP")
