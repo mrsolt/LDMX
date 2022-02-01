@@ -14,8 +14,11 @@ def openPDF(outfile,canvas):
 def closePDF(outfile,canvas):
 	canvas.Print(outfile+".pdf]")
 
-def N_ap(m, eps, eot):
-    return 7. * pow(eps/1.e-5, 2) * pow(0.1/m, 2) * eot / 1.e16
+def N_ap(m, eps, eot, eatvis=False):
+	if(not eatvis):
+		return 7. * pow(eps/1.e-5, 2) * pow(0.1/m, 2) * eot / 1.e16
+	else:
+		return 20 * 7. * pow(eps/1.e-5, 2) * pow(0.1/m, 2) * eot / 1.e16 #This formula is wrong
 
 def N_sig(Naprime, zmin, zmax, gctau):
     return Naprime * (np.exp(-zmin / gctau) - np.exp(-zmax / gctau))
@@ -24,13 +27,16 @@ def GammaCTau(E, m, eps):
     return 65. * (E/8.) * pow(1.e-5 / eps, 2) * pow(0.1/m, 2)
 
 label = ""
+eatvis = False
 
-options, remainder = getopt.gnu_getopt(sys.argv[1:], 'hl:')
+options, remainder = getopt.gnu_getopt(sys.argv[1:], 'hl:e')
 
 # Parse the command line arguments
 for opt, arg in options:
 		if opt=='-l':
 			label = arg
+		if opt=='-e':
+			eatvis = True
 		if opt=='-h':
 			print_usage()
 			sys.exit(0)
@@ -43,8 +49,10 @@ outfile = remainder[0]
 ebeam = 8. #GeV
 zmin = 43. #cm
 zmax = 315. #cm
-#zmin = 43 #cm
-#zmax = 84 #cm
+if(eatvis):
+	startEcal = 22.05 #Ecal starts at 22.05 cm
+	zmin = zmin - startEcal #cm
+	zmax = zmax - startEcal #cm
 eot = 1.e16
 minSignal = 14
 
@@ -79,7 +87,7 @@ for i in range(0, nMass):
         logeps = (epsmax - epsmin)/float(NepsBins - 1) * j + epsmin
         eps = 10**logeps
         #epsarr.append(eps)
-        Naprime = N_ap(mass, eps, eot)
+        Naprime = N_ap(mass, eps, eot, eatvis)
         gctau = GammaCTau(ebeam, mass, eps)
         nsig = N_sig(Naprime, zmin, zmax, gctau)
         #print(nsig)
