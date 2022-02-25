@@ -131,8 +131,9 @@ for opt, arg in options:
 decay_width = gamma_ap_tot(mAp, eps)
 tau = Tau(mAp, eps)
 
-tmin = zmin / c_speed * energy / mAp
-tmax = zmax / c_speed * energy / mAp
+tmin = zmin / c_speed / (energy / mAp)
+tmax = zmax / c_speed / (energy / mAp)
+print("{0} {1}".format(tmin, tmax))
 # Create outdir if needed
 if not os.path.exists(outdir): os.makedirs(outdir)
 
