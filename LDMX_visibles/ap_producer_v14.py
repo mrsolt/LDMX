@@ -9,14 +9,14 @@ proc = 'v14'
 p = ldmxcfg.Process(proc)
 p.outputFiles = [sys.argv[4]]
 p.maxEvents = 32000
-p.logFrequency = 1
+#p.logFrequency = 1
 p.termLogLevel = 0
 p.run = int(sys.argv[1])
 
 sim = simulator.simulator('visible_signal')
 sim.description = "A' -> ee visible signal decay"
 sim.setDetector('ldmx-det-v14',True)
-sim.runNumber = int(sys.argv[1])
+#sim.runNumber = int(sys.argv[1])
 
 # Generators
 from LDMX.SimCore import generators
